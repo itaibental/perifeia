@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מערך שיעור: קרוב ללב, רחוק מהעין?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Rubik', sans-serif; /* שינוי הפונט ל-Rubik */
+            background-color: #dbeafe; /* תכלת (Sky Blue 100) */
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* רקע דגל ישראל מוחלש */
+        .flag-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                linear-gradient(to bottom, 
+                    transparent 10%, 
+                    rgba(0, 56, 184, 0.05) 10%, 
+                    rgba(0, 56, 184, 0.05) 25%, 
+                    transparent 25%, 
+                    transparent 35%, 
+                    rgba(0, 56, 184, 0.03) 40%, /* Star hint */
+                    transparent 65%,
+                    transparent 75%,
+                    rgba(0, 56, 184, 0.05) 75%, 
+                    rgba(0, 56, 184, 0.05) 90%, 
+                    transparent 90%
+                ),
+                white;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M50 15 L65 40 L95 40 L70 60 L80 90 L50 70 L20 90 L30 60 L5 40 L35 40 Z' fill='none' stroke='rgba(0, 56, 184, 0.06)' stroke-width='2'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 80%;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Rubik', sans-serif;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 3px solid #000000;
+            box-shadow: 8px 8px 0px rgba(0, 56, 184, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 12px 12px 0px rgba(0, 56, 184, 0.3);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #0038b8 0%, #0056e0 100%);
+            color: white;
+            border-bottom: 3px solid #000000;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 2px, transparent 2.5px);
+            background-size: 15px 15px;
+            opacity: 0.5;
+        }
+
+        .tab-btn {
+            border: 2px solid #000;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        
+        .tab-btn.active {
+            background-color: #0038b8;
+            color: white;
+            border-color: #000;
+        }
+
+        .tab-btn:not(.active):hover {
+            background-color: #e6efff;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-item {
+            position: relative;
+            padding-right: 1.5rem;
+        }
+        .question-item::before {
+            content: '♣';
+            position: absolute;
+            right: 0;
+            color: #0038b8;
+            font-weight: bold;
+        }
+
+        .source-box {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background-color: #f8fafc;
+            border-right: 4px solid #0038b8;
+            font-size: 0.85rem;
+            color: #475569;
+        }
+        .source-title {
+            font-weight: bold;
+            color: #0038b8;
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.25rem;
+        }
+    </style>
+</head>
+<body class="p-6 md:p-10">
+
+    <div class="flag-bg"></div>
+
+    <!-- כותרת ראשית -->
+    <header class="max-w-5xl mx-auto mb-12 text-center card p-8 rounded-lg bg-white relative">
+        <div class="absolute top-0 left-0 w-full h-4 bg-blue-700"></div>
+        
+        <!-- לוגו בית הספר -->
+        <div class="mb-6 flex justify-center">
+            <!-- אם תרצו להשתמש בקובץ ספציפי מהמחשב, החליפו את ה-src בשם הקובץ (למשל: logo.png) -->
+            <img src="https://upload.wikimedia.org/wikipedia/he/thumb/b/b8/Ort_Israel_Logo.svg/300px-Ort_Israel_Logo.svg.png" 
+                 alt="לוגו אורט שחקים נהריה" 
+                 class="h-20 md:h-24 object-contain">
+        </div>
+
+        <h1 class="text-4xl md:text-5xl font-bold text-blue-900 mb-4">קרוב ללב, רחוק מהעין?</h1>
+        <h2 class="text-2xl text-gray-700 mb-6">פערים חברתיים-גיאוגרפיים בישראל</h2>
+        
+        <div class="flex flex-wrap justify-center gap-4 text-sm md:text-base">
+            <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full border border-blue-300 font-bold">
+                <i class="fas fa-bullseye ml-2"></i>מטרה: פיתוח חשיבה ביקורתית
+            </span>
+            <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full border border-blue-300 font-bold">
+                <i class="fas fa-users ml-2"></i>קהל יעד: תיכון
+            </span>
+            <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full border border-blue-300 font-bold">
+                <i class="fas fa-clock ml-2"></i>משך: 45-90 דקות
+            </span>
+        </div>
+    </header>
+
+    <!-- הנחיות למורה -->
+    <section class="max-w-5xl mx-auto mb-12">
+        <div class="bg-yellow-50 border-2 border-black p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-bold mb-2 text-gray-800"><i class="fas fa-chalkboard-teacher ml-2"></i>מהלך השיעור (למורה)</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li><strong>פתיחה (5 דקות):</strong> אסוציאציות על הלוח: "מדינת תל אביב" מול "פריפריה".</li>
+                <li><strong>התנסות (15 דקות):</strong> עבודה בקבוצות - כל קבוצה מקבלת אחד מהנושאים למטה.</li>
+                <li><strong>מליאה (20 דקות):</strong> הצגת מסקנות ודיון כיתתי.</li>
+                <li><strong>סיכום:</strong> דיון על אקטיביזם ומעורבות אזרחית.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- אזור הכרטיסיות -->
+    <main class="max-w-5xl mx-auto space-y-12">
+        
+        <!-- כרטיסייה 1 -->
+        <article class="card rounded-xl overflow-hidden" id="topic1">
+            <div class="card-header">
+                <h3 class="text-2xl font-bold flex items-center">
+                    <span class="bg-white text-blue-800 w-10 h-10 flex items-center justify-center rounded-full ml-3 text-lg border-2 border-black">1</span>
+                    תחבורה ציבורית – הזכות לנוע בחופשיות
+                </h3>
+            </div>
+            <div class="p-6">
+                <!-- טאבים -->
+                <div class="flex gap-4 mb-6 border-b-2 border-gray-200 pb-2">
+                    <button onclick="switchTab(1, 'text')" id="btn-text-1" class="tab-btn active px-6 py-2 rounded-lg">
+                        <i class="fas fa-book-open ml-2"></i>הטקסט
+                    </button>
+                    <button onclick="switchTab(1, 'questions')" id="btn-quest-1" class="tab-btn px-6 py-2 rounded-lg">
+                        <i class="fas fa-comments ml-2"></i>שאלות לדיון
+                    </button>
+                </div>
+
+                <!-- תוכן הטקסט -->
+                <div id="content-text-1" class="fade-in">
+                    <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 text-lg leading-relaxed text-gray-800">
+                        "דמיינו שאתם רוצים לצאת לבילוי, לראיון עבודה או סתם לפגוש חברים בעיר אחרת. במרכז הארץ, הרכבת הקלה עוברת כל דקות ספורות, והאוטובוסים זמינים אל תוך הלילה, גם בסופי שבוע בחלק מהערים. לעומת זאת, בפריפריה, אם אין לך רכב פרטי – אתה בבעיה. התלות בלוחות זמנים דלילים, רכבות שמסתיימות מוקדם או משבתות שמשתקות את האזור ליום וחצי בשבוע, יוצרת מציאות של חוסר עצמאות. המרחק הפיזי הוא לא הבעיה היחידה, אלא הזמן שנדרש לגשר עליו והמחיר הכלכלי של אחזקת רכב כחובה ולא כפריבילגיה."
+                    </div>
+                    <div class="source-box">
+                        <div class="source-title"><i class="fas fa-info-circle ml-2"></i>מקורות ונתונים:</div>
+                        <ul>
+                            <li>שיעור השימוש בתחבורה ציבורית להגעה לעבודה במרכז (כ-21%) כפול מזה שבפריפריה (כ-10%) (<strong>הלמ"ס, מדדי פריפריאליות</strong>).</li>
+                            <li>דו"ח מבקר המדינה (2022) מצביע על פערים משמעותיים בתדירות ובנגישות בין המטרופולינים הגדולים ליישובי הצפון והדרום.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- תוכן השאלות -->
+                <div id="content-quest-1" class="hidden fade-in">
+                    <ul class="space-y-4 text-lg text-gray-800">
+                        <li class="question-item">האם קרה לכם שוויתרתם על מפגש או אירוע בגלל קושי להגיע אליו בתחבורה ציבורית?</li>
+                        <li class="question-item">כיצד היעדר תחבורה ציבורית יעילה משפיע על בני נוער שעדיין אין להם רישיון נהיגה?</li>
+                        <li class="question-item">כיצד המצב התחבורתי משפיע על היכולת שלכם לעבוד בחופשות או בשעות הערב?</li>
+                        <li class="question-item">כשאתם חושבים על השירות הצבאי או הלאומי המתקרב, האם אתם חוששים שהמרחק והתחבורה יקשו עליכם לצאת הביתה?</li>
+                        <li class="question-item">האם המדינה צריכה לסבסד רכבים לתושבי הפריפריה, או להשקיע יותר בתחבורה ציבורית?</li>
+                        <li class="question-item font-semibold text-blue-900 bg-blue-50 p-2 rounded">ובכל זאת למרות כל הבעיות. בואו ננסה למצוא סיבות טובות שבגללן עדיף לגור בפריפריה.</li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+
+        <!-- כרטיסייה 2 -->
+        <article class="card rounded-xl overflow-hidden" id="topic2">
+            <div class="card-header">
+                <h3 class="text-2xl font-bold flex items-center">
+                    <span class="bg-white text-blue-800 w-10 h-10 flex items-center justify-center rounded-full ml-3 text-lg border-2 border-black">2</span>
+                    שירותי בריאות – זמן שווה חיים
+                </h3>
+            </div>
+            <div class="p-6">
+                <div class="flex gap-4 mb-6 border-b-2 border-gray-200 pb-2">
+                    <button onclick="switchTab(2, 'text')" id="btn-text-2" class="tab-btn active px-6 py-2 rounded-lg">
+                        <i class="fas fa-book-open ml-2"></i>הטקסט
+                    </button>
+                    <button onclick="switchTab(2, 'questions')" id="btn-quest-2" class="tab-btn px-6 py-2 rounded-lg">
+                        <i class="fas fa-comments ml-2"></i>שאלות לדיון
+                    </button>
+                </div>
+
+                <div id="content-text-2" class="fade-in">
+                    <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 text-lg leading-relaxed text-gray-800">
+                        "הזכות לבריאות אמורה להיות שווה לכולם, אך הסטטיסטיקה מספרת סיפור אחר. תוחלת החיים במרכז הארץ גבוהה בשלוש שנים בממוצע מאשר בפריפריה הצפונית. הסיבה אינה גנטית, אלא זמינות. כשתושב המרכז זקוק למומחה, הוא ימצא תור תוך ימים או שבועות בודדים. בפריפריה, ההמתנה יכולה להימשך חודשים ארוכים. המרחק ממרכזים רפואיים גדולים (כמו שיבא או איכילוב) והמחסור ברופאים מומחים בצפון, יוצרים משוואה אכזרית: המיקום הגיאוגרפי שלכם עלול לקבוע את איכות הטיפול שתקבלו."
+                    </div>
+                    <div class="source-box">
+                        <div class="source-title"><i class="fas fa-info-circle ml-2"></i>מקורות ונתונים:</div>
+                        <ul>
+                            <li>פער בתוחלת חיים: כ-2.3-3 שנים בין מחוז המרכז למחוז הצפון (<strong>דו"ח אי-שוויון בבריאות, משרד הבריאות 2023</strong>).</li>
+                            <li>זמני המתנה: דו"ח <strong>מבקר המדינה (2024)</strong> מצא זמני המתנה ארוכים משמעותית לרפואה יועצת בפריפריה לעומת המרכז (לדוגמה: פער של מאות אחוזים בזמינות אורתופדים).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="content-quest-2" class="hidden fade-in">
+                    <ul class="space-y-4 text-lg text-gray-800">
+                        <li class="question-item">האם אתם או בני משפחתכם נאלצתם לנסוע רחוק כדי לקבל טיפול רפואי ספציפי?</li>
+                        <li class="question-item">איך לדעתכם משפיעה הידיעה שהרופא רחוק על תחושת הביטחון האישי?</li>
+                        <li class="question-item">האם אתם מרגישים ששירותי רפואה דחופה זמינים בצפון באותה מידה כמו בגוש דן?</li>
+                        <li class="question-item">האם המעבר ל"רפואה מרחוק" הוא פתרון אמיתי לפריפריה?</li>
+                        <li class="question-item">מה צריך לעשות כדי לשכנע רופאים טובים לבוא לגור ולעבוד בגליל המערבי?</li>
+                        <li class="question-item font-semibold text-blue-900 bg-blue-50 p-2 rounded">ובכל זאת למרות כל הבעיות. בואו ננסה למצוא סיבות טובות שבגללן עדיף לגור בפריפריה.</li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+
+        <!-- כרטיסייה 3 -->
+        <article class="card rounded-xl overflow-hidden" id="topic3">
+            <div class="card-header">
+                <h3 class="text-2xl font-bold flex items-center">
+                    <span class="bg-white text-blue-800 w-10 h-10 flex items-center justify-center rounded-full ml-3 text-lg border-2 border-black">3</span>
+                    סיקור תקשורתי במלחמה – שגרה של מי?
+                </h3>
+            </div>
+            <div class="p-6">
+                <div class="flex gap-4 mb-6 border-b-2 border-gray-200 pb-2">
+                    <button onclick="switchTab(3, 'text')" id="btn-text-3" class="tab-btn active px-6 py-2 rounded-lg">
+                        <i class="fas fa-book-open ml-2"></i>הטקסט
+                    </button>
+                    <button onclick="switchTab(3, 'questions')" id="btn-quest-3" class="tab-btn px-6 py-2 rounded-lg">
+                        <i class="fas fa-comments ml-2"></i>שאלות לדיון
+                    </button>
+                </div>
+
+                <div id="content-text-3" class="fade-in">
+                    <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 text-lg leading-relaxed text-gray-800">
+                        "המציאות הביטחונית בנהריה ובגבול הצפון היא מורכבת, במיוחד בתקופות מלחמה. אך צפייה בחדשות עשויה לעורר תחושת ניכור. כשהמרכז מותקף, השידורים עוברים למתכונת חירום, הפרשנים מזועזעים והמסך נצבע באדום. לעומת זאת, מטחים בצפון לעיתים נדחקים לשולי המהדורה או מוגדרים כ'טפטופים' וכ'שגרה'. התחושה היא שיש 'דם סמיך יותר', ושמה שקורה מעבר לחדרה נתפס כאירוע מקומי ולא כבעיה לאומית דחופה. הסיקור התקשורתי לא רק משקף מציאות, הוא גם מעצב את תשומת הלב של מקבלי ההחלטות."
+                    </div>
+                    <div class="source-box">
+                        <div class="source-title"><i class="fas fa-info-circle ml-2"></i>מקורות ונתונים:</div>
+                        <ul>
+                            <li>תופעת ה"סיקור החסר" של הפריפריה מתוארת במחקרים של <strong>הרשות השנייה לטלוויזיה ורדיו</strong> ושל חוקרי תקשורת (כגון פרופ' אלי אברהם), המצביעים על כך שהפריפריה מוצגת בחדשות בעיקר בהקשרים שליליים או ביטחוניים, ופחות כמרכז חיים נורמטיבי.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="content-quest-3" class="hidden fade-in">
+                    <ul class="space-y-4 text-lg text-gray-800">
+                        <li class="question-item">כשאתם צופים בחדשות, האם אתם מרגישים שהקול שלכם נשמע?</li>
+                        <li class="question-item">למה לדעתכם התקשורת מתייחסת אחרת לטיל בתל אביב לעומת טיל בצפון?</li>
+                        <li class="question-item">האם יש פער בין המצב בחדשות בטלוויזיה לבין הרשתות החברתיות?</li>
+                        <li class="question-item">כיצד הסיקור התקשורתי משפיע על התחושה של תושבי המרכז כלפי הצפון?</li>
+                        <li class="question-item font-semibold text-blue-900 bg-blue-50 p-2 rounded">ובכל זאת למרות כל הבעיות. בואו ננסה למצוא סיבות טובות שבגללן עדיף לגור בפריפריה.</li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+
+        <!-- כרטיסייה 4 -->
+        <article class="card rounded-xl overflow-hidden" id="topic4">
+            <div class="card-header">
+                <h3 class="text-2xl font-bold flex items-center">
+                    <span class="bg-white text-blue-800 w-10 h-10 flex items-center justify-center rounded-full ml-3 text-lg border-2 border-black">4</span>
+                    תרבות הפנאי – מה עושים הערב?
+                </h3>
+            </div>
+            <div class="p-6">
+                <div class="flex gap-4 mb-6 border-b-2 border-gray-200 pb-2">
+                    <button onclick="switchTab(4, 'text')" id="btn-text-4" class="tab-btn active px-6 py-2 rounded-lg">
+                        <i class="fas fa-book-open ml-2"></i>הטקסט
+                    </button>
+                    <button onclick="switchTab(4, 'questions')" id="btn-quest-4" class="tab-btn px-6 py-2 rounded-lg">
+                        <i class="fas fa-comments ml-2"></i>שאלות לדיון
+                    </button>
+                </div>
+
+                <div id="content-text-4" class="fade-in">
+                    <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 text-lg leading-relaxed text-gray-800">
+                        "תרבות היא מזון לנשמה, אבל היא גם עניין של גיאוגרפיה. בעוד שבמרכז הארץ ישנו שפע של מוזיאונים, תיאטראות, הופעות ענק מחו"ל ופסטיבלים בכל סוף שבוע, הפריפריה נאלצת להסתפק בפחות. כדי לראות את האמן האהוב עליכם, סביר להניח שתצטרכו לנסוע שעות, לשלם על דלק וחניה, ולחזור מאוחר בלילה. היצע החוגים, הקולנוע ומקומות הבילוי לנוער מצומצם יותר, מה שמשאיר את בני הנוער פעמים רבות עם האופציה של 'לשבת בברזלים' או בפארק, פשוט כי אין אלטרנטיבה זמינה קרובה."
+                    </div>
+                    <div class="source-box">
+                        <div class="source-title"><i class="fas fa-info-circle ml-2"></i>מקורות ונתונים:</div>
+                        <ul>
+                            <li>על פי נתוני <strong>מרכז אדוה (תמונת מצב חברתית 2023)</strong>, קיים פער עקבי בהוצאה המוניציפלית לתרבות וספורט לנפש בין רשויות פורום ה-15 (ערים מבוססות במרכז) לבין ערי הפריפריה, הנובע מהכנסות עצמיות נמוכות יותר מארנונה עסקית בפריפריה.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="content-quest-4" class="hidden fade-in">
+                    <ul class="space-y-4 text-lg text-gray-800">
+                        <li class="question-item">איפה אתם מבלים ביום שישי בערב? האם יש מספיק אפשרויות?</li>
+                        <li class="question-item">האם ויתרתם פעם על אירוע תרבותי רק בגלל המרחק?</li>
+                        <li class="question-item">מדוע רשתות גדולות מהססות לפתוח סניפים בגליל המערבי?</li>
+                        <li class="question-item">האם יש יתרון לתרבות הפנאי בצפון (קהילתיות, טבע) שהמרכז מפסיד?</li>
+                        <li class="question-item font-semibold text-blue-900 bg-blue-50 p-2 rounded">ובכל זאת למרות כל הבעיות. בואו ננסה למצוא סיבות טובות שבגללן עדיף לגור בפריפריה.</li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+
+        <!-- כרטיסייה 5 -->
+        <article class="card rounded-xl overflow-hidden" id="topic5">
+            <div class="card-header">
+                <h3 class="text-2xl font-bold flex items-center">
+                    <span class="bg-white text-blue-800 w-10 h-10 flex items-center justify-center rounded-full ml-3 text-lg border-2 border-black">5</span>
+                    חינוך והזדמנויות – נקודת הזינוק
+                </h3>
+            </div>
+            <div class="p-6">
+                <div class="flex gap-4 mb-6 border-b-2 border-gray-200 pb-2">
+                    <button onclick="switchTab(5, 'text')" id="btn-text-5" class="tab-btn active px-6 py-2 rounded-lg">
+                        <i class="fas fa-book-open ml-2"></i>הטקסט
+                    </button>
+                    <button onclick="switchTab(5, 'questions')" id="btn-quest-5" class="tab-btn px-6 py-2 rounded-lg">
+                        <i class="fas fa-comments ml-2"></i>שאלות לדיון
+                    </button>
+                </div>
+
+                <div id="content-text-5" class="fade-in">
+                    <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 text-lg leading-relaxed text-gray-800">
+                        "האם לתלמיד בנהריה יש את אותו סיכוי להצליח כמו לתלמיד ברמת השרון? על הנייר – כן. בפועל, הפערים בתקצוב פר-תלמיד בין הרשויות המקומיות יוצרים הבדלים משמעותיים. זה מתבטא במגוון המגמות בתיכון (סייבר, אמנויות נדירות, דיפלומטיה), באיכות המעבדות, ובפעילויות העשרה בלתי פורמליות. ה'תקרה הזכוכית' לפעמים שקופה, אבל היא שם. ההשקעה בחינוך בפריפריה היא המפתח לצמצום פערים, אבל כרגע, נקודת הזינוק של ילד במרכז לרוב קרובה יותר לקו הסיום."
+                    </div>
+                    <div class="source-box">
+                        <div class="source-title"><i class="fas fa-info-circle ml-2"></i>מקורות ונתונים:</div>
+                        <ul>
+                            <li>על פי נתוני <strong>משרד החינוך וניתוחי מרכז אדוה (2024)</strong>, רשויות חזקות (למשל תל אביב או רמת השרון) משקיעות אלפי שקלים יותר בתלמיד בשנה מתקציבן העצמי בהשוואה לרשויות בפריפריה, למרות תקצוב דיפרנציאלי חלקי של המדינה.</li>
+                            <li>פער בזכאות לבגרות איכותית (5 יח' אנגלית/מתמטיקה) עדיין קיים בין המרכז לפריפריה החברתית-גיאוגרפית.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="content-quest-5" class="hidden fade-in">
+                    <ul class="space-y-4 text-lg text-gray-800">
+                        <li class="question-item">האם בית הספר מספק לכם את כל הכלים להצליח כמו תלמיד במרכז?</li>
+                        <li class="question-item">האם יש מגמות לימוד שחסרות לכם כאן?</li>
+                        <li class="question-item">האם אתם מרגישים פער בחינוך הבלתי פורמלי?</li>
+                        <li class="question-item">האם בעתיד תצטרכו לעזוב את הצפון כדי "להצליח בגדול"?</li>
+                        <li class="question-item font-semibold text-blue-900 bg-blue-50 p-2 rounded">ובכל זאת למרות כל הבעיות. בואו ננסה למצוא סיבות טובות שבגללן עדיף לגור בפריפריה.</li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+
+    </main>
+
+    <footer class="max-w-5xl mx-auto mt-12 mb-8 text-center text-gray-600">
+        <p class="font-bold text-lg mb-4">"הכוח לשינוי מתחיל במודעות - וממשיך בעשייה"</p>
+        <p class="text-sm leading-relaxed">
+            נוצר ע"י תלמידי מגמת מדיה ופרסום בבית הספר אורט שחקים נהריה<br>
+            כחלק מפרוייקט הגמר שלהם העוסק בפערים שבין מרכז ופריפריה (תשפ"ו)<br>
+            <span class="font-semibold mt-2 block">נועה כהן, נועה אליאס, דניאל מוסקוביץ', גבריאלה סקאבה סינגל, שחר פוגודה</span>
+        </p>
+    </footer>
+
+    <script>
+        function switchTab(topicNum, type) {
+            // Get all buttons and contents for this topic
+            const textBtn = document.getElementById(`btn-text-${topicNum}`);
+            const questBtn = document.getElementById(`btn-quest-${topicNum}`);
+            const textContent = document.getElementById(`content-text-${topicNum}`);
+            const questContent = document.getElementById(`content-quest-${topicNum}`);
+
+            // Reset classes
+            textBtn.classList.remove('active');
+            questBtn.classList.remove('active');
+            textContent.classList.add('hidden');
+            questContent.classList.add('hidden');
+
+            // Set active state
+            if (type === 'text') {
+                textBtn.classList.add('active');
+                textContent.classList.remove('hidden');
+            } else {
+                questBtn.classList.add('active');
+                questContent.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
