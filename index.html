@@ -10,14 +10,14 @@
     
     <style>
         body {
-            font-family: 'Rubik', sans-serif; /* שינוי הפונט ל-Rubik */
+            font-family: 'Rubik', sans-serif;
             background-color: #dbeafe; /* תכלת (Sky Blue 100) */
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
         }
 
-        /* רקע דגל ישראל מוחלש */
+        /* רקע מפת ישראל - סטטי */
         .flag-bg {
             position: fixed;
             top: 0;
@@ -25,25 +25,13 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: 
-                linear-gradient(to bottom, 
-                    transparent 10%, 
-                    rgba(0, 56, 184, 0.05) 10%, 
-                    rgba(0, 56, 184, 0.05) 25%, 
-                    transparent 25%, 
-                    transparent 35%, 
-                    rgba(0, 56, 184, 0.03) 40%, /* Star hint */
-                    transparent 65%,
-                    transparent 75%,
-                    rgba(0, 56, 184, 0.05) 75%, 
-                    rgba(0, 56, 184, 0.05) 90%, 
-                    transparent 90%
-                ),
-                white;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M50 15 L65 40 L95 40 L70 60 L80 90 L50 70 L20 90 L30 60 L5 40 L35 40 Z' fill='none' stroke='rgba(0, 56, 184, 0.06)' stroke-width='2'/%3E%3C/svg%3E");
+            /* תמונת המפה מהקישור שסופק (בפורמט raw לצפייה ישירה) */
+            background-image: url("https://raw.githubusercontent.com/itaibental/perifeia/main/pic/Israel_relief_location_map.svg.png");
             background-repeat: no-repeat;
             background-position: center;
-            background-size: 80%;
+            background-size: cover; /* מכסה את המסך בצורה סטטית */
+            opacity: 0.5; /* שקיפות הופחתה (הרקע בולט יותר) */
+            mix-blend-mode: multiply; /* שילוב טוב עם הרקע התכול */
         }
 
         h1, h2, h3 {
@@ -147,7 +135,6 @@
         
         <!-- לוגו בית הספר -->
         <div class="mb-6 flex justify-center">
-            <!-- הקישור הומר ל-raw כדי שהתמונה תוצג ישירות -->
             <img src="https://raw.githubusercontent.com/itaibental/perifeia/main/pic/Screenshot%202026-01-11%20160501.png" 
                  alt="לוגו אורט שחקים נהריה" 
                  class="h-20 md:h-24 object-contain">
